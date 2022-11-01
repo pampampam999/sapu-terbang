@@ -12,7 +12,7 @@ load_dotenv(find_dotenv())
 #bot identity
 TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(TOKEN)
-version = "0.3"
+version = "0.3.1"
 totalgc = 4
 
 #setting log
@@ -81,16 +81,16 @@ def send_roletest(message):
     mode = str(texts[2])
     host = str(texts[3])
     
-    ''''
+    
     bot.send_message(
         chat_id=-1001734121931, 
         text="*bold* _italic_ `fixed width font` [link](http://google.com).", 
-        parse_mode=telegram.constants.PARSEMODE_MARKDOWN_V2
+        parse_mode='Markdown'
         )  
-    '''
     
     
-    bot.send_message(chat_id=-1001734121931,text='`{}`\n\nMode : {}\nHost : {}'.format(code,mode,host))
+    
+    bot.send_message(chat_id=-1001734121931,text='`{}`\n\nMode : {}\nHost : {}'.format(code,mode,host),parse_mode='Markdown')
 
 @bot.message_handler(commands=['register'])
 def register(message):
