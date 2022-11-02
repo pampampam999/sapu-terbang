@@ -13,7 +13,7 @@ load_dotenv(find_dotenv())
 #bot identity
 TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(TOKEN)
-version = "0.3.2"
+version = "0.3.3"
 totalgc = 4
 
 #sqlite
@@ -34,9 +34,6 @@ from row in data:
 conn.commit()
 conn.close()
 '''
-
-
-
 
 #setting log
 logging.basicConfig(level=logging.DEBUG,
@@ -105,13 +102,7 @@ def send_roletest(message):
     code = str(texts[1])
     mode = str(texts[2])
     host = str(texts[3])
-        
-    bot.send_message(  
-        chat_id=-1001734121931, 
-        text="*bold \*text*", 
-        parse_mode='MarkdownV2'
-        )  
-            
+       
     bot.send_message(chat_id=-1001734121931,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
 
 @bot.message_handler(commands=['register'])
@@ -128,28 +119,23 @@ def register(message):
     '''.format(chat_id=chat_id))
     if data.fetchone():
         print("Record ada")
-        bot.send_message(chat_id,'Group sudah terdaftar sebelumnya')
-    else:
-        print("Record tidak ada")
-
         #for row in data:
         #   print('=============1')
         #    print(row)
         #    print('=============2')
-                
-        conn.close()
-
+        bot.send_message(chat_id,'Group sudah terdaftar sebelumnya')
+        
+    else:
+        print("Record tidak ada")
+        nama_gc = message.chat.title
 
         #if not register inserting query database
-        query = 'INSERT INTO "group" (id_gc,nama_gc) values({chat_id},{chat_id});'.format(chat_id=chat_id)
+        query = 'INSERT INTO "group" (id_gc,nama_gc) values({chat_id},"{nama_gc}");'.format(chat_id=chat_id,nama_gc=nama_gc)
         run_query(query)
             
         #send massage if succes
         bot.send_message(chat_id,'Group ID : {} berhasil di daftarkan'.format(chat_id))
-    
-    
-    
-    
+    conn.close()
 
 @bot.message_handler(commands=['groupinfo'])
 def info(message):
