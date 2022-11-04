@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv,find_dotenv
 import sqlite3
 
+
 #Load .env variables
 load_dotenv(find_dotenv())
 #print(os.getenv('TOKEN'))
@@ -142,6 +143,15 @@ def info(message):
     log(message,'groupinfo')
     chat_id=message.chat.id
     bot.reply_to(message,'Group ID : {}'.format(chat_id))
+
+@bot.message_handler(commands=['list'])
+def show_instagram_profile(message):
+    log(message,'list')
+    chat_id=message.chat.id
+
+    bot.reply_to(message,'Group ID : {}'.format(chat_id))
+
+    
 
 print('Bot Start Running')
 bot.polling()
