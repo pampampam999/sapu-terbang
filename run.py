@@ -153,19 +153,26 @@ def show_instagram_profile(message):
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
     data = cur.execute('''
-        SELECT * FROM "room" where from_gc="{chat_id}" or is_public="1"
+        SELECT * from "room" WHERE from_gc="{chat_id}";
     '''.format(chat_id=chat_id))
-    
-    if data.fetchone():
+    record = data.fetchall()
+
+    if record:
         print("Record ada")
-        for row in data:
+        
+        for row in record:
             print(row)
+            #bot.send_message(chat_id,'{}\n'.format(row[1]))        
+        print("Done loop")
+        
 
     else:
         print("Record tidak ada")
         nama_gc = message.chat.title
+    
+    conn.close()
 
-    bot.send_message(chat_id,'List room {}'.format(row[1]))
+    
     
 
     
