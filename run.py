@@ -14,7 +14,7 @@ load_dotenv(find_dotenv())
 #bot identity
 TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(TOKEN)
-version = "0.3.3"
+version = "0.4.0"
 totalgc = 4
 
 #sqlite
@@ -92,7 +92,7 @@ def send_role(message):
     #gc cucing
     bot.send_message(chat_id=-1001765155506,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
     #gc idn -1001607301547
-    bot.send_message(chat_id=-1001607301547,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+    #bot.send_message(chat_id=-1001607301547,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
 
 @bot.message_handler(commands=['roletest'])
 def send_roletest(message):
@@ -109,7 +109,7 @@ def send_roletest(message):
 @bot.message_handler(commands=['register'])
 def register(message):
     log(message,'register')
-    #mengambil data char
+    #mengambil data chat
     chat_id=message.chat.id #id group
     
     #check id if has registered
@@ -149,7 +149,24 @@ def show_instagram_profile(message):
     log(message,'list')
     chat_id=message.chat.id
 
-    bot.reply_to(message,'Group ID : {}'.format(chat_id))
+    #check id chat
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    data = cur.execute('''
+        SELECT * FROM "room" where from_gc="{chat_id}" or is_public="1"
+    '''.format(chat_id=chat_id))
+    
+    if data.fetchone():
+        print("Record ada")
+        for row in data:
+            print(row)
+
+    else:
+        print("Record tidak ada")
+        nama_gc = message.chat.title
+
+    bot.send_message(chat_id,'List room {}'.format(row[1]))
+    
 
     
 
