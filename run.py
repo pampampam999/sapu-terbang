@@ -15,7 +15,7 @@ load_dotenv(find_dotenv())
 TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(TOKEN)
 version = "0.4.0"
-totalgc = 4
+totalgc = 1
 
 #sqlite
 #db_name = 'database.db'
@@ -86,11 +86,11 @@ def send_role(message):
     bot.reply_to(message,'Pesan di kirim ke {} group terdaftar.'.format(totalgc))
 
     #gc pam
-    bot.send_message(chat_id=-1001734121931,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+    bot.send_message(chat_id=-803823202,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
     #gc au indo gc
-    bot.send_message(chat_id=-1001746697467,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+    #bot.send_message(chat_id=-1001746697467,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
     #gc cucing
-    bot.send_message(chat_id=-1001765155506,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+    #bot.send_message(chat_id=-1001765155506,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
     #gc idn -1001607301547
     #bot.send_message(chat_id=-1001607301547,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
 
@@ -159,10 +159,10 @@ def show_instagram_profile(message):
 
     if record:
         print("Record ada")
-        
+        bot.send_message(chat_id,'Kode Di Group Ini Saja\n')  
         for row in record:
             print(row)
-            #bot.send_message(chat_id,'{}\n'.format(row[1]))        
+            bot.send_message(chat_id,'{} /public /delete\n'.format(row[1]))        
         print("Done loop")
         
 
