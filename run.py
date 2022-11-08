@@ -97,14 +97,27 @@ def send_role(message):
 @bot.message_handler(commands=['roletest'])
 def send_roletest(message):
     log(message,'roletest')
+
+    #mengambil data chat
+    chat_id=message.chat.id #id group
     
     texts = message.text.split(' ')
         
     code = str(texts[1])
     mode = str(texts[2])
     host = str(texts[3])
-       
-    bot.send_message(chat_id=-1001734121931,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+
+
+    
+    bot.reply_to(message,'Pesan di kirim ke {} group terdaftar.'.format(totalgc))
+
+    #add code to database
+    query = '''INSERT INTO room(code_room,from_gc,is_public) VALUES('{code}','{chat_id}','0')'''.format(code=code,chat_id=chat_id)
+    run_query(query)
+
+    #gc pam
+    bot.send_message(chat_id=-803823202,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+        
 
 @bot.message_handler(commands=['register'])
 def register(message):
@@ -127,13 +140,14 @@ def register(message):
         bot.send_message(chat_id,'Group sudah terdaftar sebelumnya')
         
     else:
-        print("Record tidak ada")
+        print("Record {} tidak ada dalam database")
         nama_gc = message.chat.title
 
         #if not register inserting query database
         query = 'INSERT INTO "group" (id_gc,nama_gc) values({chat_id},"{nama_gc}");'.format(chat_id=chat_id,nama_gc=nama_gc)
         run_query(query)
-            
+        print("Record {} berhasil di registrasi dalam database")
+
         #send massage if succes
         bot.send_message(chat_id,'Group ID : {} berhasil di daftarkan'.format(chat_id))
     conn.close()
