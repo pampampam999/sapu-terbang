@@ -74,7 +74,8 @@ def show_bot_version(message):
 @bot.message_handler(commands=['help'])
 def send_help(message):
     log(message,'help')
-    bot.reply_to(message,'Command yang dapat di gunakan :\n\n/role <Code> <Mode> <Host>\n/version')
+    chat_id=message.chat.id
+    bot.send_message(chat_id,'''List All Command :\n\n/role \<Code\> \<Mode\> \<Host\>\n/list \- Show room list\n/version \- Show current version''',parse_mode='MarkdownV2')
 
 @bot.message_handler(commands=['role'])
 def send_role(message):
@@ -116,8 +117,8 @@ def send_roletest(message):
     run_query(query)
 
     #gc pam
-    bot.send_message(chat_id=-803823202,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
-        
+    bot.send_message(chat_id=-803823202,text='**`{code}` `{code}` `{code}`\n`{code}` `{code}` `{code}` \n`{code}` `{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+    #bot.send_message(chat_id=-803823202,text='**`{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')    
 
 @bot.message_handler(commands=['register'])
 def register(message):
