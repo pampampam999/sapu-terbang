@@ -6,7 +6,6 @@ import os
 from dotenv import load_dotenv,find_dotenv
 import sqlite3
 
-
 #Load .env variables
 load_dotenv(find_dotenv())
 #print(os.getenv('TOKEN'))
