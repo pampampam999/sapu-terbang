@@ -163,6 +163,8 @@ def show_instagram_profile(message):
     log(message,'list')
     chat_id=message.chat.id
 
+    
+
     #check id chat
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
@@ -173,11 +175,19 @@ def show_instagram_profile(message):
 
     if record:
         print("Record ada")
-        bot.send_message(chat_id,'Kode Di Group Ini Saja\n')  
+        #bot.send_message(chat_id,'Kode Di Group Ini Saja\n') 
+        isiRoomCode = str("List Room :\nCode\tMode\tHost")
         for row in record:
             print(row)
-            bot.send_message(chat_id,'{} /public /delete\n'.format(row[1]))        
+            code = row[1] #  mengambil code dari row
+                  
+            isiRoomCode = isiRoomCode + str("\n{code}".format(code=code))
+            
+
         print("Done loop")
+        bot.send_message(chat_id,isiRoomCode)
+        
+        
         
 
     else:
