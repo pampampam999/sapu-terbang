@@ -112,7 +112,7 @@ def send_roletest(message):
     bot.reply_to(message,'Pesan di kirim ke {} group terdaftar.'.format(totalgc))
 
     #add code to database
-    query = '''INSERT INTO room(code_room,from_gc,is_public) VALUES('{code}','{chat_id}','0')'''.format(code=code,chat_id=chat_id)
+    query = '''INSERT INTO room(code_room,mode,host,from_gc,is_public) VALUES('{code}','{mode}','{host}','{chat_id}','0')'''.format(code=code,chat_id=chat_id,mode=mode,host=host)
     run_query(query)
 
     #gc pam
@@ -176,16 +176,19 @@ def show_instagram_profile(message):
     if record:
         print("Record ada")
         #bot.send_message(chat_id,'Kode Di Group Ini Saja\n') 
-        isiRoomCode = str("List Room :\nCode\tMode\tHost")
+        isiRoomCode = str("List Room :\n")
         for row in record:
             print(row)
             code = row[1] #  mengambil code dari row
-                  
-            isiRoomCode = isiRoomCode + str("\n{code}".format(code=code))
+            mode = row[2]
+            host = row[3]
+
+            isiRoomCode = isiRoomCode + str("\n`{code}` {mode} {host}".format(code=code,mode=mode,host=host))
             
 
         print("Done loop")
-        bot.send_message(chat_id,isiRoomCode)
+        isiRoomCode = isiRoomCode + str("\n\nPencet kodenya untuk copy langsung")
+        bot.send_message(chat_id,isiRoomCode,parse_mode='MarkdownV2')
         
         
         
