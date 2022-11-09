@@ -186,6 +186,15 @@ def show_instagram_profile(message):
     
     conn.close()
 
+#if bot is added to group, this handler will work
+@bot.my_chat_member_handler()
+def my_chat_m(message: types.ChatMemberUpdated):
+    old = message.old_chat_member
+    new = message.new_chat_member
+    if new.status == "member":
+        bot.send_message(message.chat.id,"Apaan sih add add") # Welcome message, if bot was added to group
+        #bot.leave_chat(message.chat.id) # command buat keluar dari group itu
+
     
     
 
