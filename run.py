@@ -99,7 +99,7 @@ def send_role(message):
     #gc pam
     bot.send_message(chat_id=-803823202,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
     #gc au indo gc
-    #bot.send_message(chat_id=-1001746697467,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+    bot.send_message(chat_id=-1001746697467,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
     #gc cucing
     #bot.send_message(chat_id=-1001765155506,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
     #gc idn -1001607301547
@@ -183,7 +183,7 @@ def info(message):
     bot.reply_to(message,'Group ID : {}'.format(chat_id))
 
 @bot.message_handler(commands=['list'])
-def show_instagram_profile(message):
+def show_list(message):
     log(message,'list')
     chat_id=message.chat.id
 
@@ -211,7 +211,7 @@ def show_instagram_profile(message):
             
 
         print("Done loop")
-        isiRoomCode = isiRoomCode + str("\n\nPencet kodenya untuk copy langsung\n/role \<code\> \<mode\> \<host\> \- menambahkan room\n/del \<code\> \- untuk menghapus room")
+        isiRoomCode = isiRoomCode + str("\n\nPencet kodenya untuk copy langsung\n\n/role \<code\> \<mode\> \<host\> \- menambahkan room\n/del \<code\> \- untuk menghapus room")
         bot.send_message(chat_id,isiRoomCode,parse_mode='MarkdownV2')
         
         
