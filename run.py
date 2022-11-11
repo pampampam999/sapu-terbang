@@ -5,6 +5,7 @@ import logging
 import os
 from dotenv import load_dotenv,find_dotenv
 import sqlite3
+import time
 
 #Load .env variables
 load_dotenv(find_dotenv())
@@ -261,7 +262,8 @@ def my_chat_m(message: types.ChatMemberUpdated):
             bot.send_message(message.chat.id,"Apaan sih add add") # Welcome message, if bot was added to group
             bot.send_message(chat_id,'Group ID : {}\nNama : {} \n\nBelom ke daftar tau'.format(chat_id,nama_gc))
             bot.send_message(chat_id,'Bye...!!!')
-            #bot.leave_chat(message.chat.id) # command buat keluar dari group itu
+            time.sleep(10)
+            bot.leave_chat(message.chat.id) # command buat keluar dari group itu
         conn.close()
 
         
