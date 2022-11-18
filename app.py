@@ -1,0 +1,268 @@
+import telebot
+from telebot import types
+import datetime
+import logging
+import os
+from dotenv import load_dotenv,find_dotenv
+import sqlite3
+import time
+
+#Load .env variables
+load_dotenv(find_dotenv())
+#print(os.getenv('TOKEN'))
+
+#bot identity
+TOKEN = os.getenv('TOKEN')
+bot = telebot.TeleBot(TOKEN)
+version = "0.5.0"
+totalgc = 1
+
+#sqlite
+#db_name = 'database.db'
+def run_query(query):
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    cur.execute(query)
+    conn.commit()
+    conn.close()
+
+'''
+cur.excute()
+from row in data:
+    print(row)
+
+#coomit buat manipulasi data
+conn.commit()
+conn.close()
+'''
+
+#setting log
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+
+
+
+def log(message,commandText):
+    tanggal = datetime.datetime.now()
+    tanggal = tanggal.strftime('[%d %B %Y]')
+    firstName = message.chat.first_name
+    lastName = message.chat.last_name
+    text_log='{},{},{},{}\n'.format(tanggal,firstName,lastName,commandText)
+    log_bot = open('log.txt','a')
+    log_bot.write(text_log)
+    log_bot.close
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    log(message,'start')
+    #memanggil inline keyboard
+    markup = types.InlineKeyboardMarkup()
+    btnContactOwner = types.InlineKeyboardButton('Pamsky.',url='t.me/impamsky')
+    
+    #assign tata letak keyboard
+    markup.row(btnContactOwner)
+    bot.reply_to(message,'Hallo, Sapu terbang siap mengantar pesan ke Group sebelah. \n/help untuk melihat bantuan.\nKalo masi bingung tanya creator',reply_markup=markup)
+
+@bot.message_handler(commands=['version'])
+def show_bot_version(message):
+    log(message,'version')
+    bot.reply_to(message,'Sekarang bot di versi\nv{}'.format(version))
+
+@bot.message_handler(commands=['help'])
+def send_help(message):
+    log(message,'help')
+    chat_id=message.chat.id
+    #bot.send_message(chat_id,'''List All Command :\n\n/role \<Code\> \<Mode\> \<Host\>\n/list \- Show room list\n/del \<code\> \- untuk menghapus code pada /list \n/version \- Show current version''',parse_mode='MarkdownV2')
+
+@bot.message_handler(commands=['role'])
+def send_role(message):
+    log(message,'role')
+     #mengambil data chat
+    chat_id=message.chat.id #id group
+    
+    texts = message.text.split(' ')
+        
+    code = str(texts[1]).upper()
+    mode = str(texts[2]).capitalize()
+    host = str(texts[3])
+
+
+    
+    bot.reply_to(message,'Pesan di kirim ke {} group terdaftar.'.format(totalgc))
+
+    #add code to database
+    query = '''INSERT INTO room(code_room,mode,host,from_gc,is_public) VALUES('{code}','{mode}','{host}','{chat_id}','0')'''.format(code=code,chat_id=chat_id,mode=mode,host=host)
+    run_query(query)
+
+    #gc pam
+    bot.send_message(chat_id=-1001826122574,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+    #gc au indo gc
+    #bot.send_message(chat_id=-1001746697467,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+    #gc cucing
+    #bot.send_message(chat_id=-1001765155506,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+    #gc idn -1001607301547
+    #bot.send_message(chat_id=-1001607301547,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+
+
+@bot.message_handler(commands=['del'])
+def send_role(message):
+    log(message,'del')
+    chat_id = message.chat.id
+    texts = message.text.split(' ')
+    code = str(texts[1]).upper()
+
+    query = '''DELETE FROM room WHERE code_room="{}"'''.format(code)
+    run_query(query)
+
+    bot.send_message(chat_id,'Code _{}_ berhasil di hapus terdaftar'.format(code),parse_mode='MarkdownV2')
+
+@bot.message_handler(commands=['roletest'])
+def send_roletest(message):
+    log(message,'roletest')
+
+    #mengambil data chat
+    chat_id=message.chat.id #id group
+    
+    texts = message.text.split(' ')
+        
+    code = str(texts[1]).upper()
+    mode = str(texts[2]).capitalize()
+    host = str(texts[3])
+
+
+    
+    bot.reply_to(message,'Pesan di kirim ke {} group terdaftar.'.format(totalgc))
+
+    #add code to database
+    query = '''INSERT INTO room(code_room,mode,host,from_gc,is_public) VALUES('{code}','{mode}','{host}','{chat_id}','0')'''.format(code=code,chat_id=chat_id,mode=mode,host=host)
+    run_query(query)
+
+    #gc pam
+    bot.send_message(chat_id=-1001826122574,text='**`{code}` `{code}` `{code}`\n`{code}` `{code}` `{code}` \n`{code}` `{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+    #bot.send_message(chat_id=-1001826122574,text='**`{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')    
+
+@bot.message_handler(commands=['register'])
+def register(message):
+    log(message,'register')
+    #mengambil data chat
+    chat_id=message.chat.id #id group
+    
+    #check id if has registered
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    data = cur.execute('''
+        SELECT * FROM "group" where id_gc="{chat_id}"
+    '''.format(chat_id=chat_id))
+    if data.fetchone():
+        print("Record ada")
+        #for row in data:
+        #   print('=============1')
+        #    print(row)
+        #    print('=============2')
+        bot.send_message(chat_id,'Group sudah terdaftar sebelumnya')
+        
+    else:
+        print("Record {} tidak ada dalam database")
+        nama_gc = message.chat.title
+
+        #if not register inserting query database
+        query = 'INSERT INTO "group" (id_gc,nama_gc) values({chat_id},"{nama_gc}");'.format(chat_id=chat_id,nama_gc=nama_gc)
+        run_query(query)
+        print("Record {} berhasil di registrasi dalam database")
+
+        #send massage if succes
+        bot.send_message(chat_id,'Group ID : {} berhasil di daftarkan'.format(chat_id))
+    conn.close()
+
+@bot.message_handler(commands=['groupinfo'])
+def info(message):
+    log(message,'groupinfo')
+    chat_id=message.chat.id
+    bot.reply_to(message,'Group ID : {}'.format(chat_id))
+
+@bot.message_handler(commands=['list'])
+def show_list(message):
+    log(message,'list')
+    chat_id=message.chat.id
+
+    #check id chat
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    data = cur.execute('''
+        SELECT * from "room" WHERE from_gc="{chat_id}";
+    '''.format(chat_id=chat_id))
+    record = data.fetchall()
+
+    if record:
+        print("Record ada")
+        #bot.send_message(chat_id,'Kode Di Group Ini Saja\n') 
+        isiRoomCode = str("List Room :\n")
+        for row in record:
+            print(row)
+            code = row[1] #  mengambil code dari row
+            mode = row[2]
+            host = row[3]
+
+            isiRoomCode = isiRoomCode + str("\n`{code}` {mode} {host}".format(code=code,mode=mode,host=host))
+            
+
+        print("Done loop")
+        isiRoomCode = isiRoomCode + str("\n\nPencet kodenya untuk copy langsung\n\n/role \<code\> \<mode\> \<host\> \- menambahkan room\n/del \<code\> \- untuk menghapus room")
+        bot.send_message(chat_id,isiRoomCode,parse_mode='MarkdownV2')
+        
+        
+    else:
+        print("Record tidak ada")
+        nama_gc = message.chat.title
+        bot.send_message(chat_id,'Belum ada room tersedia. Silahkan membuat room. Bantuan membuat room /help')
+    
+    conn.close()
+
+#if bot is added to group, this handler will work
+@bot.my_chat_member_handler()
+def my_chat_m(message: types.ChatMemberUpdated):
+    old = message.old_chat_member
+    new = message.new_chat_member
+
+    chat_id=message.chat.id #id group
+
+
+    if new.status == "member":
+        
+        
+        #check apa gc udah ada di database
+        #mengambil data chat
+        
+        
+        #check id if has registered
+        conn = sqlite3.connect('database.db')
+        cur = conn.cursor()
+        data = cur.execute('''
+            SELECT * FROM "group" where id_gc="{chat_id}"
+        '''.format(chat_id=chat_id))
+        conn.close()
+        if data.fetchone():
+            print("Record ada")
+            #for row in data:
+            #   print('=============1')
+            #    print(row)
+            #    print('=============2')
+            bot.send_message(chat_id,'Eh udah terdaftar ya')
+            
+        else:
+            print("Record {} tidak ada dalam database")
+            nama_gc = message.chat.title
+
+            bot.send_message(message.chat.id,"Apaan sih add add") # Welcome message, if bot was added to group
+            bot.send_message(chat_id,'Group ID : {}\nNama : {} \n\nBelom ke daftar tau'.format(chat_id,nama_gc))
+            bot.send_message(chat_id,'Bye...!!!')
+            time.sleep(10)
+            bot.leave_chat(message.chat.id) # command buat keluar dari group itu
+        
+
+
+print('Bot Start Running')
+bot.polling()
