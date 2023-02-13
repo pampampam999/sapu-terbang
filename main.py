@@ -14,7 +14,7 @@ load_dotenv(find_dotenv())
 #bot identity
 TOKEN = os.getenv('TOKEN')
 bot = telebot.TeleBot(TOKEN)
-version = "0.5.0"
+version = "0.6.0"
 totalgc = 1
 
 #sqlite
@@ -75,7 +75,7 @@ def show_bot_version(message):
 def send_help(message):
     log(message,'help')
     chat_id=message.chat.id
-    bot.send_message(chat_id,'''List All Command :\n\n/role \<Code\> \<Mode\> \<Host\>\n/list \- Show room list\n/del <code> \- untuk menghapus code pada /list \n/version \- Show current version''',parse_mode='MarkdownV2')
+    bot.send_message(chat_id,'''List All Command :\n\nAmong Us Room\n/role \<Code\> \<Mode\> \<Host\>\n/list \- Show room list\n/del \<code\> \- untuk menghapus code pada /list \n\nBirthday\n/ultah\n\nGeneral\n/version \- Show current version''',parse_mode='MarkdownV2')
 
 @bot.message_handler(commands=['role'])
 def send_role(message):
