@@ -183,14 +183,15 @@ def info(message):
     chat_id=message.chat.id
     bot.reply_to(message,'Group ID : {}'.format(chat_id))
 
-@bot.message_handler(commands=['list'])
+#Showing active Code Room Among us
+@bot.message_handler(commands=['room'])
 def show_list(message):
-    log(message,'list')
+    log(message,'room')
     chat_id=message.chat.id
 
     
 
-    #check id chat
+    #Check id chat
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
     data = cur.execute('''
@@ -265,6 +266,46 @@ def my_chat_m(message: types.ChatMemberUpdated):
             time.sleep(10)
             bot.leave_chat(message.chat.id) # command buat keluar dari group itu
         conn.close()
+
+#Birthday List
+@bot.message_handler(commands=['ultah'])
+def ultah(message):
+    log(message,'ultah')
+
+    #Get varibale
+    chat_id=message.chat.id
+    text = message.text
+    user_id=message.from_user.id
+    print(user_id)
+
+
+    #Check user apakah ada dalam database
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    data = cur.execute('''
+        SELECT * from "lahir" WHERE id_user="{user_id}";
+    '''.format(user_id=user_id))
+    record = data.fetchall()
+
+    #If record found
+    if record:
+        print("Record ada")
+        #bot.send_message(chat_id,'Kode Di Group Ini Saja\n') 
+        isiRoomCode = str("🎊🎉List Ulang Tahun🎉🎊\n")
+        for row in record:
+            print(row)
+            nama = row[1]
+            mention = "["+nama+"](tg://user?id="+str(user_id)+")"
+            tgl = row[2] #  mengambil code dari row
+            bulan = row[3]
+            tahun = row[4]
+
+            isiRoomCode = isiRoomCode + mention + str(" {tgl}/{bulan}/{tahun}".format(tgl=tgl,bulan=bulan,tahun=tahun))
+    else:
+        print("record tidak berhasil / tidak ada")
+    
+    #mengirim pesan dari olahan database
+    bot.send_message(chat_id=chat_id,text=isiRoomCode,parse_mode="MarkdownV2")
 
         
 
