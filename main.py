@@ -75,7 +75,7 @@ def show_bot_version(message):
 def send_help(message):
     log(message,'help')
     chat_id=message.chat.id
-    bot.send_message(chat_id,'''List All Command :\n\nAmong Us Room\n/role \<Code\> \<Mode\> \<Host\>\n/list \- Show room list\n/del \<code\> \- untuk menghapus code pada /list \n\nBirthday\n/ultah\n\nGeneral\n/version \- Show current version''',parse_mode='MarkdownV2')
+    bot.send_message(chat_id,'''List All Command :\n\nAmong Us Room\n/role \- Memasukkan Code Room\n/list \- Show room list\n/del \<code\> \- untuk menghapus code pada /list \n\nBirthday\n/ultah \- Untuk melihat list hari ulangtahun di group\n/setBirthday \- Untuk mengatur hari ulangtahun\n\nProfile\n/profile \- Melihat identitas kita\n\nMisc :\n/groupinfo \- Melihat info group\n\nGeneral\n/version \- Melihat versi bot''',parse_mode='MarkdownV2')
 
 @bot.message_handler(commands=['role'])
 def send_role(message):
@@ -84,27 +84,28 @@ def send_role(message):
     chat_id=message.chat.id #id group
     
     texts = message.text.split(' ')
-        
-    code = str(texts[1]).upper()
-    mode = str(texts[2]).capitalize()
-    host = str(texts[3])
 
+    if len(texts) <= 1:
+        bot.send_message(chat_id=chat_id,text="Example :\n/role <Code> <Mode> <Host>\n/role abcdef normal ryu")
+    else:    
+        code = str(texts[1]).upper()
+        mode = str(texts[2]).capitalize()
+        host = str(texts[3])
 
-    
-    bot.reply_to(message,'Pesan di kirim ke {} group terdaftar.'.format(totalgc))
+        bot.reply_to(message,'Pesan di kirim ke {} group terdaftar.'.format(totalgc))
 
-    #add code to database
-    query = '''INSERT INTO room(code_room,mode,host,from_gc,is_public) VALUES('{code}','{mode}','{host}','{chat_id}','0')'''.format(code=code,chat_id=chat_id,mode=mode,host=host)
-    run_query(query)
+        #add code to database
+        query = '''INSERT INTO room(code_room,mode,host,from_gc,is_public) VALUES('{code}','{mode}','{host}','{chat_id}','0')'''.format(code=code,chat_id=chat_id,mode=mode,host=host)
+        run_query(query)
 
-    #gc pam
-    bot.send_message(chat_id=-803823202,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
-    #gc au indo gc
-    bot.send_message(chat_id=-1001746697467,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
-    #gc cucing
-    #bot.send_message(chat_id=-1001765155506,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
-    #gc idn -1001607301547
-    #bot.send_message(chat_id=-1001607301547,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+        #gc pam
+        bot.send_message(chat_id=-1001826122574,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+        #gc au indo gc
+        #bot.send_message(chat_id=-1001746697467,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+        #gc cucing
+        #bot.send_message(chat_id=-1001765155506,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
+        #gc idn -1001607301547
+        #bot.send_message(chat_id=-1001607301547,text='**`{code}` `{code}`\n`{code}` `{code}`**\n☝Click code to copy☝\n\nMode : {mode}\nHost : {host}'.format(code=code,mode=mode,host=host),parse_mode='MarkdownV2')
 
 
 @bot.message_handler(commands=['del'])
@@ -283,15 +284,17 @@ def ultah(message):
     conn = sqlite3.connect('database.db')
     cur = conn.cursor()
     data = cur.execute('''
-        SELECT * from "lahir" WHERE id_user="{user_id}";
+        SELECT * from "user" WHERE id_user="{user_id}";
     '''.format(user_id=user_id))
     record = data.fetchall()
 
+    
     #If record found
+    isiRoomCode = str("🎊🎉List Ulang Tahun🎉🎊\n")
     if record:
         print("Record ada")
         #bot.send_message(chat_id,'Kode Di Group Ini Saja\n') 
-        isiRoomCode = str("🎊🎉List Ulang Tahun🎉🎊\n")
+        
         for row in record:
             print(row)
             nama = row[1]
@@ -301,13 +304,59 @@ def ultah(message):
             tahun = row[4]
 
             isiRoomCode = isiRoomCode + mention + str(" {tgl}/{bulan}/{tahun}".format(tgl=tgl,bulan=bulan,tahun=tahun))
+            #mengirim pesan dari olahan database
+            bot.send_message(chat_id=chat_id,text=isiRoomCode,parse_mode="MarkdownV2")
     else:
         print("record tidak berhasil / tidak ada")
+        isiRoomCode = isiRoomCode + "List Kosong"
+        bot.send_message(chat_id=chat_id,text=isiRoomCode)
     
-    #mengirim pesan dari olahan database
-    bot.send_message(chat_id=chat_id,text=isiRoomCode,parse_mode="MarkdownV2")
+    
 
-        
+@bot.message_handler(commands=['profile'])
+def show_profile(message):
+    #Get variable
+    chat_id=message.chat.id
+    id_user=message.from_user.id
+    firstName = message.from_user.first_name
+    lastName = message.from_user.last_name
+    userName = message.from_user.username
+
+    #Check user apakah ada dalam database
+    conn = sqlite3.connect('database.db')
+    cur = conn.cursor()
+    data = cur.execute('''
+        SELECT * from "user" WHERE id_user="{id_user}";
+    '''.format(id_user=id_user))
+    record = data.fetchall()
+
+    #If record found
+    if record:
+        print("Record ada")
+        for row in record:
+            print(row)
+            tgl = row[2] #  mengambil code dari row
+            bulan = row[3]
+            tahun = row[4]
+
+            lahir = str(" {tgl}/{bulan}/{tahun}".format(tgl=tgl,bulan=bulan,tahun=tahun))
+    else:
+        lahir = "/setBirthday"
+
+    bot.send_message(chat_id=chat_id,text="ID : {id_user}\nFirst Name : {firstName}\nLast Name : {lastName}\nUsername : @{userName}\nBirthday : {lahir}".format(id_user=id_user,firstName=firstName,lastName=lastName,userName=userName,lahir=lahir))
+
+@bot.message_handler(commands=['setBirthday'])
+def setting_profile(message):
+    #get variable
+    chat_id = message.chat.id
+    text = message.text.split(' ')
+    
+    #If dont have parameter show help for birthday
+    if len(text) <= 1 :
+        bot.send_message(chat_id=chat_id,text="Example :\n/setBirthday dd/mm/yyyy\n/setBirthday 29/12\n/setBirthday 29/12/2020\n\n*tidak harus menyertakan tahun")
+    else:
+        pass
+
 
     
     
