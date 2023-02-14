@@ -182,7 +182,9 @@ def register(message):
 def info(message):
     log(message,'groupinfo')
     chat_id=message.chat.id
-    bot.reply_to(message,'Group ID : {}'.format(chat_id))
+    memberCount=bot.get_chat_member_count(chat_id=chat_id)
+
+    bot.reply_to(message,'Group ID : {chat_id}\nJumlah Member : {memberCount}'.format(chat_id=chat_id,memberCount=memberCount))
 
 #Showing active Code Room Among us
 @bot.message_handler(commands=['room'])
@@ -293,7 +295,8 @@ def ultah(message):
     isiRoomCode = str("🎊🎉List Ulang Tahun🎉🎊\n")
     if record:
         print("Record ada")
-        #bot.send_message(chat_id,'Kode Di Group Ini Saja\n') 
+        #bot.send_message(chat_id,'Kode Di Group Ini Saja\n')
+        bot 
         
         for row in record:
             print(row)
