@@ -75,7 +75,7 @@ def show_bot_version(message):
 def send_help(message):
     log(message,'help')
     chat_id=message.chat.id
-    bot.send_message(chat_id,'''List All Command :\n\nAmong Us Room\n/role \- Memasukkan Code Room\n/list \- Show room list\n/del \<code\> \- untuk menghapus code pada /list \n\nBirthday\n/ultah \- Untuk melihat list hari ulangtahun di group\n/setBirthday \- Untuk mengatur hari ulangtahun\n\nProfile\n/profile \- Melihat identitas kita\n\nMisc :\n/groupinfo \- Melihat info group\n\nGeneral\n/version \- Melihat versi bot''',parse_mode='MarkdownV2')
+    bot.send_message(chat_id,'''List All Command :\n\nAmong Us Room\n/role \- Memasukkan Code Room\n/room \- Show room list\n/del \<code\> \- untuk menghapus code pada /list \n\nBirthday\n/ultah \- Untuk melihat list hari ulangtahun di group\n/setBirthday \- Untuk mengatur hari ulangtahun\n\nProfile\n/profile \- Melihat identitas kita\n\nMisc :\n/groupinfo \- Melihat info group\n\nGeneral\n/version \- Melihat versi bot''',parse_mode='MarkdownV2')
 
 @bot.message_handler(commands=['role'])
 def send_role(message):
@@ -214,7 +214,7 @@ def show_list(message):
             
 
         print("Done loop")
-        isiRoomCode = isiRoomCode + str("\n\nPencet kodenya untuk copy langsung\n\n/role \<code\> \<mode\> \<host\> \- menambahkan room\n/del \<code\> \- untuk menghapus room")
+        isiRoomCode = isiRoomCode + str("\n\nPencet kodenya untuk mengcopy")
         bot.send_message(chat_id,isiRoomCode,parse_mode='MarkdownV2')
         
         
