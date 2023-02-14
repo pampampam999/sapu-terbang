@@ -6,6 +6,9 @@ import os
 from dotenv import load_dotenv,find_dotenv
 import sqlite3
 import time
+from pyrogram import Client
+
+
 
 #Load .env variables
 load_dotenv(find_dotenv())
@@ -13,7 +16,11 @@ load_dotenv(find_dotenv())
 
 #bot identity
 TOKEN = os.getenv('TOKEN')
+APP_ID=os.getenv('APP_ID')
+APP_HASH=os.getenv('APP_HASH')
 bot = telebot.TeleBot(TOKEN)
+app = Client("my_account")
+app.run()
 version = "0.6.0"
 totalgc = 1
 
@@ -183,7 +190,7 @@ def info(message):
     log(message,'groupinfo')
     chat_id=message.chat.id
     memberCount=bot.get_chat_member_count(chat_id=chat_id)
-
+    
     bot.reply_to(message,'Group ID : {chat_id}\nJumlah Member : {memberCount}'.format(chat_id=chat_id,memberCount=memberCount))
 
 #Showing active Code Room Among us
@@ -412,4 +419,5 @@ def setting_profile(message):
     
 
 print('Bot Start Running')
+app.run()
 bot.polling()
