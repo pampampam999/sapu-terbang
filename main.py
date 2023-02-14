@@ -339,7 +339,12 @@ def show_profile(message):
             bulan = row[3]
             tahun = row[4]
 
-            lahir = str(" {tgl}/{bulan}/{tahun}".format(tgl=tgl,bulan=bulan,tahun=tahun))
+            #if tahun 0 makan jadi empty
+            if tahun == 0:
+                lahir = str(" {tgl}/{bulan}".format(tgl=tgl,bulan=bulan))
+            else:
+                lahir = str(" {tgl}/{bulan}/{tahun}".format(tgl=tgl,bulan=bulan,tahun=tahun))
+            
     else:
         lahir = "/setBirthday"
 
@@ -349,13 +354,53 @@ def show_profile(message):
 def setting_profile(message):
     #get variable
     chat_id = message.chat.id
+    id_user= message.from_user.id
     text = message.text.split(' ')
+
     
     #If dont have parameter show help for birthday
     if len(text) <= 1 :
-        bot.send_message(chat_id=chat_id,text="Example :\n/setBirthday dd/mm/yyyy\n/setBirthday 29/12\n/setBirthday 29/12/2020\n\n*tidak harus menyertakan tahun")
+        bot.send_message(chat_id=chat_id,text="Example :\n/setBirthday dd mm yyyy\n/setBirthday 29 12\n/setBirthday 29 12 2020\n\n*tidak harus menyertakan tahun")
     else:
-        pass
+        #get data from text
+        tgl = text[1]
+        bulan = text[2]
+        if len(text) <= 2:
+            tahun = 0
+            print("tahun tidak ada")
+        else:
+            try: 
+                tahun = text[3]
+            except:
+                print("ada eror")
+                tahun = 0
+
+        nama = str(message.from_user.first_name) + str(message.from_user.last_name)
+        print(nama)
+
+        #check is user in database ?
+        conn = sqlite3.connect('database.db')
+        cur = conn.cursor()
+        data = cur.execute('''
+            SELECT * from "user" WHERE id_user="{id_user}";
+        '''.format(id_user=id_user))
+        record = data.fetchall()
+
+        if record:
+            print("update")
+        
+        else:
+            #if not register inserting query database
+            query = 'INSERT INTO "user" (id_user,tgl_lahir,bulan_lahir,tahun_lahir) values({id_user},{tgl_lahir},{bulan_lahir},{tahun_lahir});'.format(id_user=id_user,tgl_lahir=tgl,bulan_lahir=bulan,tahun_lahir=tahun)
+            run_query(query)
+            #print("Record {} berhasil di registrasi dalam database")
+
+            #send massage if succes
+            bot.send_message(chat_id,'Tanggal Lahir Berhasil Di Ubah'.format(chat_id))
+            
+            #show profile after edited
+            show_profile(message)
+        
 
 
     
