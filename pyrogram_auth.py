@@ -8,6 +8,8 @@ TOKEN = os.getenv('TOKEN')
 APP_ID=os.getenv('APP_ID')
 APP_HASH=os.getenv('APP_HASH')
 
+
+
 print('Type of bot\n[1] User Telegram\n[2] Bot Telegram\n')
 type = input("Type : ")
 
