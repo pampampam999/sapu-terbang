@@ -19,8 +19,7 @@ TOKEN = os.getenv('TOKEN')
 APP_ID=os.getenv('APP_ID')
 APP_HASH=os.getenv('APP_HASH')
 bot = telebot.TeleBot(TOKEN)
-app = Client("my_account")
-app.run()
+app = Client("my_bot")
 version = "0.6.0"
 totalgc = 1
 
@@ -419,5 +418,7 @@ def setting_profile(message):
     
 
 print('Bot Start Running')
-app.run()
 bot.polling()
+print('Bot Start Running 1')
+app.run()
+print('Bot Start Running 2')
