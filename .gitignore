@@ -4,3 +4,5 @@ SapuTerbang.code-workspace
 database.db
 my_account.session
 my_account.session-journal
+my_bot.session-journal
+my_bot.session
